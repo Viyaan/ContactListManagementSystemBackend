@@ -1,0 +1,23 @@
+{
+  "name": "contactlistmanagement_listcontacts",
+  "version": "1.0.0",
+  "description": "list all the contacts from contactlist management",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Express",
+    "rest",
+    "api",
+    "mongodb",
+    "Mongoose"
+  ],
+  "author": "Viyaan Jhiingade",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.4"
+  }
+}
