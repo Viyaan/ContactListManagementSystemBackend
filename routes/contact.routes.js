@@ -1,5 +1,11 @@
 module.exports = (app) => {
     const contacts = require('../controllers/contact.controller.js');
+	
+	app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
     // Create a new Contact
     app.post('/contacts', contacts.create);
