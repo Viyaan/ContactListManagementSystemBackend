@@ -1,22 +1,28 @@
 const contact = require('../models/contact.model.js');
+const mongoose = require('mongoose');
 
 // Create and Save a new contact
 exports.create = (req, res) => {
     // Validate request
-    if(!req.body.content) {
+	console.log(req.body.name);
+    if(!req.body) {
         return res.status(400).send({
             message: "contact content can not be empty"
         });
     }
 
     // Create a contact
-    const contact = new Contact({
-        title: req.body.title || "Untitled contact", 
-        content: req.body.content
+    const contactModel = new contact({
+        _id: mongoose.Types.ObjectId(),
+        name: req.body.name,
+		add: req.body.add,
+		tel: req.body.tel,
+		email: req.body.email,
+		faceId: req.body.faceId
     });
 
     // Save contact in the database
-    contact.save()
+    contactModel.save()
     .then(data => {
         res.send(data);
     }).catch(err => {
