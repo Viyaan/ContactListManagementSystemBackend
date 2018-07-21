@@ -4,10 +4,7 @@ module.exports = (app) => {
 	app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-   if(req.method === "OPTIONS") {
-    res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-    return res.status(200).json({});
-  }
+   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
  
   next();
 });
