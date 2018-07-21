@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // Create and Save a new contact
 exports.create = (req, res) => {
     // Validate request
-	console.log(req.body.name);
+
     if(!req.body) {
         return res.status(400).send({
             message: "contact content can not be empty"
@@ -69,7 +69,7 @@ exports.findOne = (req, res) => {
 // Update a contact identified by the contactId in the request
 exports.update = (req, res) => {
     // Validate Request
-    if(!req.body.content) {
+    if(!req.body) {
         return res.status(400).send({
             message: "contact content can not be empty"
         });
@@ -77,8 +77,12 @@ exports.update = (req, res) => {
 
     // Find contact and update it with the request body
     contact.findByIdAndUpdate(req.params.contactId, {
-        title: req.body.title || "Untitled contact",
-        content: req.body.content
+         _id: req.params.contactId,
+        name: req.body.name,
+		add: req.body.add,
+		tel: req.body.tel,
+		email: req.body.email,
+		faceId: req.body.faceId
     }, {new: true})
     .then(contact => {
         if(!contact) {
