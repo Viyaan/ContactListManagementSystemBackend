@@ -66,6 +66,29 @@ exports.findOne = (req, res) => {
     });
 };
 
+
+// Find a single user with a username
+exports.findUser = (req, res) => {
+    user.findOne({'username':req.body.username})
+    .then(user => {
+        if(!user) {
+            return res.status(404).send({
+                message: "user not found with name " + req.body.username
+            });            
+        }
+        res.send(user.roles);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "user not found with name " + req.body.username
+            });                
+        }
+        return res.status(500).send({
+            message: "Error retrieving user with name " + req.body.username
+        });
+    });
+};
+
 // Update a user identified by the userId in the request
 exports.update = (req, res) => {
     // Validate Request

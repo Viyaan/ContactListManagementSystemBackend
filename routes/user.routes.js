@@ -11,6 +11,9 @@ module.exports = (app) => {
 
     // Create a new user
     app.post('/users', users.create);
+	
+	// Find a single user with username
+    app.post('/users/user', users.findUser);
 
     // Retrieve all users
     app.get('/users', users.findAll);
