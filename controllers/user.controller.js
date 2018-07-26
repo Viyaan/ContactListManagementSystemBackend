@@ -76,7 +76,12 @@ exports.findUser = (req, res) => {
                 message: "user not found with name " + req.body.username
             });            
         }
-        res.send(user.roles);
+		if(user.password != req.body.password) {
+            return res.status(404).send({
+                message: "wrong password " + req.body.username
+            });            
+        }
+        res.send({"userrole":user.roles[0]});
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({

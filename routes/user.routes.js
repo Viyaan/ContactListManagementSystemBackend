@@ -13,7 +13,7 @@ module.exports = (app) => {
     app.post('/users', users.create);
 	
 	// Find a single user with username
-    app.post('/users/user', users.findUser);
+    app.post('/users/auth', users.findUser);
 
     // Retrieve all users
     app.get('/users', users.findAll);
