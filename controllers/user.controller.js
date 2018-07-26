@@ -77,7 +77,7 @@ exports.findUser = (req, res) => {
             });            
         }
 		if(user.password != req.body.password) {
-            return res.status(404).send({
+            return res.status(200).send({
                 message: "wrong password " + req.body.username
             });            
         }
