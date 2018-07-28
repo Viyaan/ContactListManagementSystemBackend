@@ -95,8 +95,7 @@ exports.findOne = (req, res) => {
 
 
 // Find a single user with a username
-exports.findUser = (req, res) => {
-	
+exports.login = (req, res) => {
     user.findOne({'username':req.body.username})
     .then(user => {
         if(!user) {
