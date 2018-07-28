@@ -1,10 +1,12 @@
 const user = require('../models/user.model.js');
 const mongoose = require('mongoose');
+let jwt = require('jsonwebtoken');
+
 
 // Create and Save a new user
 exports.create = (req, res) => {
     // Validate request
-
+verifyToken(req,res);
     if(!req.body) {
         return res.status(400).send({
             message: "user content can not be empty"
@@ -34,6 +36,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all users from the database.
 exports.findAll = (req, res) => {
+	verifyToken(req,res);
     user.find()
     .then(users => {
         res.send(users);
@@ -43,6 +46,30 @@ exports.findAll = (req, res) => {
         });
     });
 };
+
+
+function verifyToken(req,res){
+
+	if(!req.headers.authorization){
+		console.log('no auth header')
+		return res.status(401).send('Unauthorised Request')
+	}
+	let token = req.headers.authorization.split(' ')[1]
+	if(token === 'null'){
+		
+		return res.status(401).send('Unauthorised Request')
+	}
+	 jwt.verify(token, 'secretkey', function(err, decoded) {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;    
+        next();
+      }
+    });
+
+}
 
 // Find a single user with a userId
 exports.findOne = (req, res) => {
@@ -69,6 +96,7 @@ exports.findOne = (req, res) => {
 
 // Find a single user with a username
 exports.findUser = (req, res) => {
+	
     user.findOne({'username':req.body.username})
     .then(user => {
         if(!user) {
@@ -81,7 +109,9 @@ exports.findUser = (req, res) => {
                 message: "wrong password " + req.body.username
             });            
         }
-        res.send({"userrole":user.roles[0]});
+		let payload = {"userrole":user.roles[0]};
+		let token = jwt.sign(payload, 'secretkey');
+        res.send({token});
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
@@ -97,6 +127,7 @@ exports.findUser = (req, res) => {
 // Update a user identified by the userId in the request
 exports.update = (req, res) => {
     // Validate Request
+	verifyToken(req,res);
     if(!req.body) {
         return res.status(400).send({
             message: "user content can not be empty"
@@ -109,7 +140,7 @@ exports.update = (req, res) => {
 		username: req.body.username,
 		password: req.body.password,
 		roles: req.body.roles
-    }, {new: true})
+    }, {upsert: true, new: true})
     .then(user => {
         if(!user) {
             return res.status(404).send({
@@ -131,6 +162,7 @@ exports.update = (req, res) => {
 
 // Delete a user with the specified userId in the request
 exports.delete = (req, res) => {
+	verifyToken(req,res);
     user.findByIdAndRemove(req.params.userId)
     .then(user => {
         if(!user) {

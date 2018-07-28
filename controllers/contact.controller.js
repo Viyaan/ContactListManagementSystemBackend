@@ -1,10 +1,11 @@
 const contact = require('../models/contact.model.js');
 const mongoose = require('mongoose');
+let jwt = require('jsonwebtoken');
 
 // Create and Save a new contact
-exports.create = (req, res) => {
+exports.create = (req, res) => { 
     // Validate request
-
+verifyToken(req,res);
     if(!req.body) {
         return res.status(400).send({
             message: "contact content can not be empty"
@@ -34,6 +35,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all contacts from the database.
 exports.findAll = (req, res) => {
+	verifyToken(req,res);
     contact.find()
     .then(contacts => {
         res.send(contacts);
@@ -44,8 +46,32 @@ exports.findAll = (req, res) => {
     });
 };
 
+function verifyToken(req,res){
+
+	if(!req.headers.authorization){
+		console.log('no auth header')
+		return res.status(401).send('Unauthorised Request')
+	}
+	let token = req.headers.authorization.split(' ')[1]
+	if(token === 'null'){
+		
+		return res.status(401).send('Unauthorised Request')
+	}
+	 jwt.verify(token, 'secretkey', function(err, decoded) {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;    
+        //next();
+      }
+    });
+
+}
+
 // Find a single contact with a contactId
 exports.findOne = (req, res) => {
+	verifyToken(req,res);
     contact.findById(req.params.contactId)
     .then(contact => {
         if(!contact) {
@@ -69,6 +95,7 @@ exports.findOne = (req, res) => {
 // Update a contact identified by the contactId in the request
 exports.update = (req, res) => {
     // Validate Request
+	verifyToken(req,res);
     if(!req.body) {
         return res.status(400).send({
             message: "contact content can not be empty"
@@ -76,6 +103,7 @@ exports.update = (req, res) => {
     }
 
     // Find contact and update it with the request body
+	console.log(req.params.contactId);
     contact.findByIdAndUpdate(req.params.contactId, {
          _id: req.params.contactId,
         name: req.body.name,
@@ -83,9 +111,10 @@ exports.update = (req, res) => {
 		tel: req.body.tel,
 		email: req.body.email,
 		faceId: req.body.faceId
-    }, {new: true})
-    .then(contact => {
+    }, {upsert: true, new: true})
+    .then(contact => { console.log(contact)
         if(!contact) {
+			
             return res.status(404).send({
                 message: "contact not found with id " + req.params.contactId
             });
@@ -105,6 +134,7 @@ exports.update = (req, res) => {
 
 // Delete a contact with the specified contactId in the request
 exports.delete = (req, res) => {
+	verifyToken(req,res);
     contact.findByIdAndRemove(req.params.contactId)
     .then(contact => {
         if(!contact) {
