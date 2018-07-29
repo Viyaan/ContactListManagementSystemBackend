@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const ContactSchema = mongoose.Schema({
-	_id:String,
+    _id: String,
     name: String,
     add: String,
-	tel: String,
-	email:String,
-	faceId:String
+    tel: String,
+    email: String,
+    faceId: String
 }, {
     timestamps: true
 });
