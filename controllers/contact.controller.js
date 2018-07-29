@@ -1,6 +1,7 @@
 const contact = require('../models/contact.model.js');
 const mongoose = require('mongoose');
 let jwt = require('jsonwebtoken');
+const config = require('../config/secret.config.js');
 
 // Create and Save a new contact
 exports.create = (req, res) => { 
@@ -57,7 +58,7 @@ function verifyToken(req,res){
 		
 		return res.status(401).send('Unauthorised Request')
 	}
-	 jwt.verify(token, 'secretkey', function(err, decoded) {      
+	 jwt.verify(token, config.secret, function(err, decoded) {      
       if (err) {
         return res.json({ success: false, message: 'Failed to authenticate token.' });    
       } else {

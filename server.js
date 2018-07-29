@@ -14,7 +14,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cors())
 
-
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
 
@@ -37,3 +36,4 @@ require('./routes/user.routes.js')(app);
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server is listening on port 3000");
 });
+

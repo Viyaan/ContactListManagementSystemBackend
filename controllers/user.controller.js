@@ -1,5 +1,7 @@
 const user = require('../models/user.model.js');
 const mongoose = require('mongoose');
+const config = require('../config/secret.config.js');
+
 let jwt = require('jsonwebtoken');
 
 
@@ -59,7 +61,7 @@ function verifyToken(req,res){
 		
 		return res.status(401).send('Unauthorised Request')
 	}
-	 jwt.verify(token, 'secretkey', function(err, decoded) {      
+	 jwt.verify(token, config.secret, function(err, decoded) {      
       if (err) {
         return res.json({ success: false, message: 'Failed to authenticate token.' });    
       } else {
@@ -109,7 +111,7 @@ exports.login = (req, res) => {
             });            
         }
 		let payload = {"userrole":user.roles[0]};
-		let token = jwt.sign(payload, 'secretkey');
+		let token = jwt.sign(payload, config.secret);
         res.send({token});
     }).catch(err => {
         if(err.kind === 'ObjectId') {
