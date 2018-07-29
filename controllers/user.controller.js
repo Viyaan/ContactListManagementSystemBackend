@@ -30,10 +30,10 @@ exports.create = (req, res) => {
     // Save user in the database
     userModel.save()
         .then(data => {
-            res.end(data);
+            res.send(data);
 
         }).catch(err => {
-            res.status(500).send({
+            res.status(500).send({ 
                 message: err.message || "Some error occurred while creating the user."
             });
         });
@@ -59,7 +59,7 @@ function verifyToken(req, res) {
         return res.status(401).send('Unauthorised Request')
     }
     let token = req.headers.authorization.split(' ')[1]
-    if (token === 'null') {
+    if (token === 'null' || token === '') {
 
         return res.status(401).send('Unauthorised Request')
     }
