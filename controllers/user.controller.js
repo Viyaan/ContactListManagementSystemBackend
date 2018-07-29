@@ -154,7 +154,7 @@ exports.update = (req, res) => {
 
     // Find user and update it with the request body
     user.findByIdAndUpdate(req.params.userId, {
-            _id: req.params.userId,
+
             username: req.body.username,
             password: req.body.password,
             roles: req.body.roles

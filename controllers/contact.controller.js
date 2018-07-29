@@ -108,7 +108,7 @@ exports.update = (req, res) => {
 
     // Find contact and update it with the request body
     contact.findByIdAndUpdate(req.params.contactId, {
-            _id: req.params.contactId,
+
             name: req.body.name,
             add: req.body.add,
             tel: req.body.tel,
