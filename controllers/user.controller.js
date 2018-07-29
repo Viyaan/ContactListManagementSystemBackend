@@ -65,7 +65,7 @@ function verifyToken(req,res){
       } else {
         // if everything is good, save to request for use in other routes
         req.decoded = decoded;    
-        next();
+       // next();
       }
     });
 
