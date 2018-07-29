@@ -1,18 +1,18 @@
 module.exports = (app) => {
     const users = require('../controllers/user.controller.js');
-	
-	app.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
-   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
- 
-  next();
-});
+
+    app.all('/*', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+
+        next();
+    });
 
     // Create a new user
     app.post('/users', users.create);
-	
-	// Find a single user with username
+
+    // Find a single user with username
     app.post('/users/auth', users.login);
 
     // Retrieve all users
