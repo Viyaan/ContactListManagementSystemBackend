@@ -50,7 +50,7 @@ exports.findAll = (req, res) => {
 function verifyToken(req, res) {
 
     if (!req.headers.authorization) {
-        console.log('no auth header')
+        
         return res.status(401).send('Unauthorised Request')
     }
     let token = req.headers.authorization.split(' ')[1]
@@ -107,7 +107,6 @@ exports.update = (req, res) => {
     }
 
     // Find contact and update it with the request body
-    console.log(req.params.contactId);
     contact.findByIdAndUpdate(req.params.contactId, {
             _id: req.params.contactId,
             name: req.body.name,
@@ -120,7 +119,6 @@ exports.update = (req, res) => {
             new: true
         })
         .then(contact => {
-            console.log(contact)
             if (!contact) {
 
                 return res.status(404).send({
